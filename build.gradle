@@ -1,21 +1,57 @@
-plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.3.11'
+group 'net.siro256yt.spigotpl.minesixsiege'
+version 'beta-1.0.0'
+
+buildscript {
+    ext.kotlin_version = '1.3.11'
+
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven {
+            name = "spigot-api"
+            url "https://hub.spigotmc.org/nexus/content/groups/public"
+        }
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath group: 'org.spigotmc', name: 'spigot-api', version: '1.8-R0.1-SNAPSHOT'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.discord4j:Discord4J:2.10.1"
+    }
 }
 
-group 'net.siro256yt.spigotpl.minesixsiege'
-version '1.0-SNAPSHOT'
+apply plugin: 'java'
+apply plugin: 'kotlin'
+
+sourceCompatibility = 1.8
+
+configurations {
+    embed
+    compile.extendsFrom(embed)
+}
 
 repositories {
     mavenCentral()
+    jcenter()
+    maven {
+        name = "spigot"
+        url "https://hub.spigotmc.org/nexus/content/groups/public"
+    }
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    compile group: 'org.spigotmc', name: 'spigot-api', version: '1.8-R0.1-SNAPSHOT'
+    embed "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    embed "com.discord4j:Discord4J:2.10.1"
+    compile "com.discord4j:Discord4J:2.10.1"
 }
 
-compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
-}
-compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+jar {
+    from "configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }"
 }
